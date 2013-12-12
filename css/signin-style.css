@@ -12,6 +12,9 @@ html, body {
 #topbar {
 	height: 70px;
 }
+#home {
+	cursor: pointer;
+}
 #topbar .navbar-inner {
 	height: 70px;
 }
