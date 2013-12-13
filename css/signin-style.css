@@ -123,3 +123,11 @@ button {
 	vertical-align: middle;
 	cursor: pointer;
 }
+.staff li {
+	list-style: none;
+	display: inline-block;
+	width: 20%;
+	height: 200px;
+	vertical-align: middle;
+	cursor: pointer;
+}

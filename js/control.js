@@ -1,8 +1,10 @@
 $.ajaxSetup({ cache: false });
 
 var person = {};
+var staff = {};
 
 $( document ).ready(function() {
+	loadStaff();	
 	registerListeners();
 });
 
@@ -11,6 +13,9 @@ function registerListeners() {
 		showEmailInput();
 	});
 	$("#home").click(function () {
+		goHome();
+	});
+	$("#home-button").click(function () {
 		goHome();
 	});
 	$("#email-next").click(function () {
@@ -27,25 +32,107 @@ function registerListeners() {
 			if (!person.sector) {
 				requestSectorForPerson(person);
 			} else {
-				processNFCCard(person);	
+				showHereToSee();	
 			}
 		}
 	});	
 	$("li").click(function () {
+		if (  $( this ).attr("name") == "staffOption") {
+			person.toSee = $( this ).attr("value");
+			showTerms();
+		}
 		if (  $( this ).attr("id") == "sectorOption") {
 			person.sector = $( this ).attr("value");
-			processNFCCard(person);
+			showHereToSee();
+		}
+	});
+	$('input[name=to-see]').keyup(function() {
+		manageStaffOptions();
+	});
+	$('#terms-agree').click(function() {
+		recordPerson(person);
+		showDone();
+	});
+}
+
+function recordPerson(person) {
+	console.log(person);
+}
+
+function loadStaff() {
+	$.ajax({
+	  dataType: "json",
+	  url: 'js/team.json',
+	  timeout: 2000,
+	  success: function(data) {
+	        staff = data.results;
+	        populate_staff(staff);
+	  },
+	  error: function() {
+	         console.log("error loading staff");
+	  }
+	});
+}
+
+function populate_staff(staff) {
+	for (i=0;i<staff.length;i++) {
+                name = staff[i].title;
+                key = staff[i].slug;
+                img = staff[i].details.square;
+                $('#to-see-sugestions').append('<li style="display: none;" name="staffOption" id="'+key+'" value="'+key+'"><figure class="staffOption"><img class="staffPic" src="'+img+'"/><caption>'+name+'</caption></figure>');
+        }
+	$("li").click(function () {
+		if (  $( this ).attr("name") == "staffOption") {
+			person.toSee = $( this ).attr("value");
+			showTerms();
+		}
+		if (  $( this ).attr("id") == "sectorOption") {
+			person.sector = $( this ).attr("value");
+			showHereToSee();
 		}
 	});
 }
 
 function requestSectorForPerson(person) {
 	showSection('sign-in-sector');	
-	console.log(person);
 }
 
 function showEmailInput() {
 	showSection('sign-in-email');
+}
+
+function showHereToSee() {
+	showSection('sign-in-to-see');
+}
+
+function showTerms() {
+	showSection('sign-in-terms');
+}
+
+function manageStaffOptions() {
+        $('input[name=to-see]').keyup(function() {
+                console.log("changed");
+                input = $('#here-to-see-input').val().toLowerCase();
+		viscount = 0;
+                for (i=0;i<staff.length;i++) {
+                        member = staff[i];
+                        name = (member.title).toLowerCase();
+                        key = member.slug;
+                        if (name.substring(0,input.length) == input && input.length > 0) {
+                                $('#'+key).fadeIn('fast');
+				viscount = viscount + 1;
+                        } else if ($('#'+key).is(':visible')) {
+                                $('#'+key).fadeOut('fast');
+                        }
+                }
+		if (viscount > 0) {
+                	$('#suggestions').fadeIn('fast');
+                	$('#to-see-next').fadeOut('fast');	
+		} else {
+                	$('#suggestions').fadeOut('fast');
+                	$('#to-see-next').fadeIn('fast');	
+		}
+        });
 }
 
 function processNFCCard(person) {
@@ -53,7 +140,7 @@ function processNFCCard(person) {
 		type: 'get',
 		url: 'server/hasIDCard.php',
 		timeout: 2000,
-		data: {email: emailinput},
+		data: {email: person.email},
 		success: function(data) {
 			showDone();
 		},
@@ -84,20 +171,22 @@ function getPersonFromEmail(emailinput) {
 }
 
 function showDone() {
-	sections = document.getElementsByTagName(name);
-	for (i=0;i<sections.length;i++) {
-		if (section.is(':visible')) {
-			section.fadeOut(function() {
-				$("#complete").fadeIn( function() {
-					setTimeOut(goHome(),2000);
-				});
-			});
-		}
-	}
+	showSection('complete');
+	setTimeout(function(){goHome();},5000);
 }
 
 function goHome() {
+	resetForms();
 	showSection('welcome');
+}
+
+function resetForms() {
+	forms = document.getElementsByTagName("form");
+	for (i=0;i<forms.length;i++) {
+		form = forms[i];
+		formId = form.getAttribute("id");
+		$('#'+formId)[0].reset();
+	}
 }
 
 function showNameInput(person) {
