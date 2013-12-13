@@ -111,6 +111,10 @@ button {
 	display: inline-block;
 	float: right;
 }
+.extra-bit {
+	width: 20%; 
+	display: inline-block;
+}
 .grid li {
 	line-height: 24px;
 	list-style: none;
@@ -130,4 +134,33 @@ button {
 	height: 200px;
 	vertical-align: middle;
 	cursor: pointer;
+}
+banner {
+	display: block;
+	position: fixed;
+	top: -10px;
+	left: 10%;
+	width: 80%;
+	height: 150px;
+	border-radius: 10px;
+	background: rgba(0,183,255,0.9);
+	z-index: 400;
+	text-align: center;
+}
+banner content {
+	padding-top: 40px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	font-size: 2em;
+}
+.touch-in-event {
+	display: inline-block;
+	float: left;
+	padding-left: 50px;
+	font-size: 2em;
+}
+.touch-in-detail {
+	display: inline-block;
+	font-size: 2em;
 }
