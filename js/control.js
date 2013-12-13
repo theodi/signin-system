@@ -226,9 +226,11 @@ function showDone() {
 
 function goHome() {
 	resetForms();
+	$("#sector-name").hide();
 	clearTimeout(timeout);
 	manageStaffOptions("");
 	showSection('welcome');
+	
 }
 
 function resetForms() {
