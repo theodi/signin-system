@@ -2,6 +2,7 @@ $.ajaxSetup({ cache: false });
 
 var person = {};
 var staff = {};
+var timeout;
 
 $( document ).ready(function() {
 	loadStaff();	
@@ -47,7 +48,7 @@ function registerListeners() {
 		}
 	});
 	$('input[name=to-see]').keyup(function() {
-		manageStaffOptions();
+		manageStaffOptions($('#here-to-see-input').val());
 	});
 	$('#terms-agree').click(function() {
 		recordPerson(person);
@@ -109,30 +110,27 @@ function showTerms() {
 	showSection('sign-in-terms');
 }
 
-function manageStaffOptions() {
-        $('input[name=to-see]').keyup(function() {
-                console.log("changed");
-                input = $('#here-to-see-input').val().toLowerCase();
-		viscount = 0;
-                for (i=0;i<staff.length;i++) {
-                        member = staff[i];
-                        name = (member.title).toLowerCase();
-                        key = member.slug;
-                        if (name.substring(0,input.length) == input && input.length > 0) {
-                                $('#'+key).fadeIn('fast');
-				viscount = viscount + 1;
-                        } else if ($('#'+key).is(':visible')) {
-                                $('#'+key).fadeOut('fast');
-                        }
-                }
-		if (viscount > 0) {
-                	$('#suggestions').fadeIn('fast');
-                	$('#to-see-next').fadeOut('fast');	
+function manageStaffOptions(input) {
+        input = input.toLowerCase();
+	viscount = 0;
+        for (i=0;i<staff.length;i++) {
+		member = staff[i];
+		name = (member.title).toLowerCase();
+		key = member.slug;
+		if (name.substring(0,input.length) == input && input.length > 0) {
+			$('#'+key).fadeIn('fast');
+			viscount = viscount + 1;
 		} else {
-                	$('#suggestions').fadeOut('fast');
-                	$('#to-see-next').fadeIn('fast');	
+			$('#'+key).fadeOut('fast');
 		}
-        });
+	}
+	if (viscount > 0) {
+		$('#suggestions').fadeIn('fast');
+		$('#to-see-next').fadeOut('fast');	
+	} else {
+		$('#suggestions').fadeOut('fast');
+		$('#to-see-next').fadeIn('fast');	
+	}
 }
 
 function processNFCCard(person) {
@@ -172,11 +170,13 @@ function getPersonFromEmail(emailinput) {
 
 function showDone() {
 	showSection('complete');
-	setTimeout(function(){goHome();},5000);
+	timeout = setTimeout(function(){goHome();},5000);
 }
 
 function goHome() {
 	resetForms();
+	clearTimeout(timeout);
+	manageStaffOptions("");
 	showSection('welcome');
 }
 
