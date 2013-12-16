@@ -3,7 +3,15 @@
 	<p id="details-text"></p>
 	<item><label>Firstname</label><input class="input" type="text" id="firstname" required></input><span class="extra-bit">&nbsp;</span></item>
 	<item><label>Lastname</label><input class="input" type="text" id="lastname" required></input><span class="extra-bit">&nbsp;</span></item>
-	<item id="sector-name" style="display: none;"><label>sector</label><input class="input" type="text" id="sector" disabled></input><span class="extra-bit"><button id="change-sector">Change sector</button></span></item>
-	<item><label>email address</label><input class="input" type="email" id="email" required></input><span class="extra-bit">&nbsp;</span></item>
+	<item id="sector-name" style="display: none;"><label>Sector</label><input class="input" type="text" id="sector" disabled></input><span class="extra-bit"><button id="change-sector">Change Sector</button></span></item>
+	<item id="role-name" style="display: none;"><label>Role</label>
+	<select class="input" id="role">
+		<option name="null" value="null"></option>
+		<option name="visitor" value="visitor">Visitor</option>
+		<option name="startup" value="startup">Startup</option>
+		<option name="staff" value="staff">ODI Staff</option>
+	</select>
+	<span class="extra-bit">&nbsp;</span></item>
+	<item><label>email</label><input class="input" type="email" id="email" required></input><span class="extra-bit">&nbsp;</span></item>
 	<button id="name-next">Next</button>
 </section>

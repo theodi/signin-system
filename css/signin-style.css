@@ -54,12 +54,12 @@ html, body {
 #sign-in-email {
 	padding-top: 2em;
 }
-input, input[type="text"], input[type="email"] {
+select, input, input[type="text"], input[type="email"] {
 	font-size: 2em;
 	margin-top: 20px;
 	margin-bottom: 20px;
 	height: inherit;
-	width: inherit;
+	width: 40%;
 }
 #email-input {
 	width: 80%;
@@ -79,7 +79,7 @@ item {
 	display: block;
 }
 section label {
-	width: 25%;
+	width: 20%;
 	display: inline-block;
 	text-align: right;
 	margin-right: 10px;
@@ -158,9 +158,9 @@ banner content {
 	display: inline-block;
 	float: left;
 	padding-left: 50px;
-	font-size: 2em;
+	font-size: 1em;
 }
 .touch-in-detail {
 	display: inline-block;
-	font-size: 2em;
+	font-size: 1em;
 }

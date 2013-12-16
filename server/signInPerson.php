@@ -34,6 +34,8 @@
 
 	$res = $mysqli->query($query);
 	
+	update_role($person);
+
 	if (!$res) {
 		header("HTTP/1.0 500 Internal Server Error");
 		echo "FAILED $query";

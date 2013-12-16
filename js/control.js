@@ -35,6 +35,7 @@ function registerListeners() {
 			person.lastname = $("#lastname").val();
 			person.email = $("#email").val();
 			person.sector = $("#sector").val();
+			person.role = $("#role").val();
 			if (!person.sector) {
 				requestSectorForPerson(person);
 			} else {
@@ -47,6 +48,7 @@ function registerListeners() {
 			person.firstname = $("#firstname").val();
 			person.lastname = $("#lastname").val();
 			person.email = $("#email").val();
+			person.role = $("#role").val();
 			person.sector = "";
 			requestSectorForPerson(person);
 		}
@@ -227,6 +229,7 @@ function showDone() {
 function goHome() {
 	resetForms();
 	$("#sector-name").hide();
+	$("#role-name").hide();
 	clearTimeout(timeout);
 	manageStaffOptions("");
 	showSection('welcome');
@@ -247,9 +250,11 @@ function showNameInput(person) {
 	$("#email").prop('disabled', true);
 	
 	if (person.firstname) {
+		$("#role-name").fadeIn('fast');
 		$("#details-text").html("Is this you? <br/> Please correct any details that are wrong and click next, else click back to start again.");
 		$("#firstname").val(person.firstname);
 		$("#lastname").val(person.lastname);
+		$("#role").val(person.role);
 		if (person.sector) {
 			$("#sector").val(person.sector);
 			$("#sector-name").fadeIn('fast');

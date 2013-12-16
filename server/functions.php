@@ -79,16 +79,21 @@ function getColumnsInTable($table) {
 	return $columns;
 }
 
-// GOT HERE WITH CHANGES
-
-function update_role($id,$role) {
+function update_role($person) {
 	global $mysqli;
+	$id = $person["id"];
+	$role = $person["role"];
+	if ($role == "") {
+		return true;
+	}
 	$query = 'delete from people_roles where (DATE(`valid_from`) = CURDATE()) and person_id="' . $id . '";';
 	$res = $mysqli->query($query);
 	$query = 'insert into people_roles set person_id="'.$id.'", role="'.$role.'";';  
 	$res = $mysqli->query($query);
 	return $res; 
 }
+
+// GOT TO HERE WITH CHANGES
 
 function add_staff_to_database($staff) {
 	global $mysqli;
