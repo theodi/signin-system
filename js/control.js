@@ -2,6 +2,7 @@ $.ajaxSetup({ cache: false });
 
 var person = {};
 var staff = {};
+var startups = {};
 var bannerContent = "";
 var timeout;
 
@@ -124,6 +125,7 @@ function loadStaff() {
 	  success: function(data) {
 	        staff = data.results;
 	        populate_staff(staff);
+		loadStartups();	
 	  },
 	  error: function() {
 	         console.log("error loading staff");
@@ -131,9 +133,26 @@ function loadStaff() {
 	});
 }
 
+function loadStartups() {
+	$.ajax({
+	  dataType: "json",
+	  url: 'server/getStartUps.php',
+	  timeout: 2000,
+	  success: function(data) {
+	        startups = data.results;
+		staff = staff.concat(startups);
+	        populate_staff(startups);
+	  },
+	  error: function() {
+	         console.log("error loading startups");
+	  }
+	});
+}
+
 function populate_staff(staff) {
 	for (i=0;i<staff.length;i++) {
                 name = staff[i].title;
+		console.log("Appending " + name);
                 key = staff[i].slug;
                 img = staff[i].details.square;
                 $('#to-see-sugestions').append('<li style="display: none;" name="staffOption" id="'+key+'" value="'+key+'"><figure class="staffOption"><img class="staffPic" src="'+img+'"/><caption>'+name+'</caption></figure>');
