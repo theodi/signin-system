@@ -93,6 +93,47 @@ function update_role($person) {
 	return $res; 
 }
 
+function register_keycard($keycard_id) {
+	global $mysqli;
+	$keycard_id = trim($keycard_id);
+	$query = 'select id,firstname,lastname from people inner join people_keycards on people.id=people_keycards.person_id where keycard_id="'.$keycard_id.'";';
+	$res = $mysqli->query($query);
+	$row = $res->fetch_row();
+	$person["id"] = $row[0];
+	$person["firstname"] = $row[1];
+	$person["lastname"] = $row[2];
+	if ($person["id"]) {
+		if (signed_in($person)) {
+			if (sign_out($person)) {
+				$output = '<h1 class="touch-in-event">Signed Out:</h1><h2 class="touch-in-detail">' . $person["firstname"] . ' ' . $person["lastname"] . '</h2>';
+				write_screen_output($output);
+				return 204; 
+			} else { 
+				return 500; 
+			}
+		} else {
+			if (sign_in($person)) { 
+				$output = '<h1 class="touch-in-event">Signed In:</h1><h2 class="touch-in-detail">' . $person["firstname"] . ' ' . $person["lastname"] . '</h2>';
+				write_screen_output($output);
+				return 201; 
+			} else { 
+				return 500; 
+			}
+		}
+	} else {
+		$file = '../data/keycard.txt';	
+		$handle = fopen($file,"w");
+		if (fwrite($handle,$keycard_id) !== false) { return 202; } else { return 500; }
+		fclose($handle);
+	}
+}
+
+function write_screen_output($output) {
+	$file = '../data/touch-event.html';	
+	$handle = fopen($file,"w");
+	fwrite($handle,$output);
+	fclose($handle);
+}
 // GOT TO HERE WITH CHANGES
 
 function add_staff_to_database($staff) {
@@ -191,27 +232,6 @@ function update_keycard_cache() {
 	fwrite($handle,$last_modified);
 	fclose($handle);	
 }	
-
-function register_keycard($keycard_id) {
-	global $mysqli;
-	$keycard_id = trim($keycard_id);
-	$query = 'select person_id from people_keycards where keycard_id="'.$keycard_id.'";';
-	$res = $mysqli->query($query);
-	$row = $res->fetch_row();
-	$id = $row[0];
-	if ($id) {
-		if (signed_in($id)) {
-			if (sign_out($id)) { return 204; } else { return 500; }
-		} else {
-			if (sign_in($id)) { return 201; } else { return 500; }
-		}
-	} else {
-		$file = '../keycard.txt';	
-		$handle = fopen($file,"w");
-		if (fwrite($handle,$keycard_id) !== false) { return 202; } else { return 500; }
-		fclose($handle);
-	}
-}
 
 function is_member($person_id) {
 	global $mysqli;

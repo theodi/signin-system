@@ -6,16 +6,11 @@ A web based sign in system for use in small offices.
 Usage
 -----
 
-To deploy master to the live server:
+This is a jekyll compatible server that can be deployed easily to a server.
 
-    bundle
-    cap deploy
+To enable the RESTful API to power the system you will need a LAMP (mysql and php) server that can be used to process requests. 
 
-This will automatically set up the database connection details, etc, and update the cached staff list from the content on the main website.
-
-If you want to update the staff list manually without a code deploy, run:
-
-    cap staff:update
+In order for data to pass throughout the system you will also need a data directory at the top level that is writable by the RESTful web server. 
 
 License
 -------
