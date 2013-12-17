@@ -134,30 +134,8 @@ function write_screen_output($output) {
 	fwrite($handle,$output);
 	fclose($handle);
 }
-// GOT TO HERE WITH CHANGES
 
-function add_staff_to_database($staff) {
-	global $mysqli;
-	for ($i=0;$i<count($staff);$i++) {
-		$person = $staff[$i];
-		$company = "The Open Data Institute";
-		$key_string = trim($person["forname"]) . trim($person["surname"]) . trim($person["email"]);
-        	$key = md5($key_string);
-		$query = "select * from people where id='$key';";
-		$res = $mysqli->query($query);
-		if ($res->num_rows < 1) {
-			$query = "insert into people set id='$key',firstname='".$person["forname"]."',email='".$person["email"]."',lastname='".$person["surname"]."',company='$company';";
-			$res = $mysqli->query($query);
-		}
-		$query = 'select * from people_roles where person_id="'.$key.'";';
-		$res = $mysqli->query($query);
-		if ($res->num_rows < 1) {
-			update_role($key,"staff");
-		}
-	}
-}
-
-function associate_keycard_person($person_id,$keycard_id) {
+function associate_keycard($person_id,$keycard_id) {
 	global $mysqli;
 
 	$keycard_id = trim($keycard_id);
@@ -167,10 +145,15 @@ function associate_keycard_person($person_id,$keycard_id) {
 	$query = 'insert into people_keycards set keycard_id="'.$keycard_id.'",person_id="'.$person_id.'";';
 	$res = $mysqli->query($query);
 
-	update_keycard_cache();
+	$file = '/tmp/foo.txt';	
+	$handle = fopen($file,"w");
+	fwrite($handle,$query);
+	fclose($handle);
 
 	return ($res);
 }
+
+//GOT HERE WITH UPDATES
 
 function associate_keycard_member($member_id,$keycard_id) {
 	global $mysqli;
@@ -182,42 +165,7 @@ function associate_keycard_member($member_id,$keycard_id) {
 	$query = 'insert into member_keycards set keycard_id="'.$keycard_id.'",member_id="'.$member_id.'";';
 	$res = $mysqli->query($query);
 
-	update_keycard_cache();
-
 	return ($res);
-}
-
-global $keycards_last_update;
-function keycard_processor() {
-	global $mysqli;
-	global $keycards_last_update;
-	
-	$file = "keycard.txt";
-	$cache_file = "_keycard.txt";
-	$last_modified = filemtime($file);
-	clearstatcache();
-	$cache_last_modified = file_get_contents($cache_file);
-	if ($keycards_last_update == "" || $keycards_last_update < $cache_last_modified) {
-		$keycards_last_update = $cache_last_modified;	
-	}
-
-	if ($keycards_last_update != $last_modified) {
-		$keycard_id = file_get_contents($file);
-		$query = 'select person_id from people_keycards where keycard_id="'.$keycard_id.'";';
-		$res = $mysqli->query($query);
-		$row = $res->fetch_row();
-		$id = $row[0];
-		if ($id) {
-			if (signed_in($id)) {
-				sign_out($id);
-			} else {
-				sign_in($id);
-			}
-		} else {
-			echo "Keycard not known!\n";
-		}
-		update_keycard_cache();
-	} 
 }
 
 function update_keycard_cache() {

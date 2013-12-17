@@ -1,5 +1,7 @@
 <?php
 
+	error_reporting(E_ALL ^ E_NOTICE);
+
 	require('functions.php');
 
 	$person = $_POST;	
@@ -13,7 +15,7 @@
 	$columns = getColumnsInTable("people");
 	$query_part = "";
 	foreach($person as $key => $value) {
-		if ($columns[$key] > 0) {
+		if ($columns[$key]) {
 			$query_part .= $key . '="' . $value .'",';
 		}
 	}
@@ -29,7 +31,7 @@
 		$query = 'update people set ' . $query_part . ' where id="' . $person["id"] . '";';
 	} else {
 		$person["id"] = get_person_id($person);
-		$query = 'insert into people set key="' . $person["id"] . '",' . $query_part . ';';
+		$query = 'insert into people set id="' . $person["id"] . '",' . $query_part . ';';
 	}
 
 	$res = $mysqli->query($query);

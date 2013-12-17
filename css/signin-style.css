@@ -164,3 +164,11 @@ banner content {
 	display: inline-block;
 	font-size: 1em;
 }
+#regular-title {
+	margin-top: 2em;
+}
+.reg-help {
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+	width: 80%;
+}

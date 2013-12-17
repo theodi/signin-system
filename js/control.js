@@ -77,6 +77,12 @@ function registerListeners() {
 	$('#sign-out').click(function() {
 		signOut(person);
 	});
+	$('#add-card').click(function() {
+		activateReader();
+		clearTimeout(timeout);
+		timeout = setTimeout(function(){goHome();},60000);
+	});
+	
 }
 
 function recordPerson(person) {
@@ -223,13 +229,16 @@ function getPersonFromEmail(emailinput) {
 
 function showDone() {
 	showSection('complete');
-	timeout = setTimeout(function(){goHome();},5000);
+	timeout = setTimeout(function(){goHome();},8000);
 }
 
 function goHome() {
 	resetForms();
 	$("#sector-name").hide();
 	$("#role-name").hide();
+	$("#new-card").html("Please put card on the reader");
+	$("#new-card").hide();
+	$("#add-card").show();
 	clearTimeout(timeout);
 	manageStaffOptions("");
 	showSection('welcome');
