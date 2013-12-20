@@ -75,6 +75,9 @@ function registerListeners() {
 	$('#terms-agree').click(function() {
 		recordPerson(person);
 	});
+	$("#terms-cancel").click(function () {
+		goHome();
+	});
 	$('#sign-out').click(function() {
 		signOut(person);
 	});
@@ -152,7 +155,6 @@ function loadStartups() {
 function populate_staff(staff) {
 	for (i=0;i<staff.length;i++) {
                 name = staff[i].title;
-		console.log("Appending " + name);
                 key = staff[i].slug;
                 img = staff[i].details.square;
                 $('#to-see-sugestions').append('<li style="display: none;" name="staffOption" id="'+key+'" value="'+key+'"><figure class="staffOption"><img class="staffPic" src="'+img+'"/><caption>'+name+'</caption></figure>');
