@@ -11,46 +11,67 @@ $.ajaxSetup ({
 //});
 
 function activateReader() {
-	$("#new-card").html("Please put card on the reader"); 
-	$("#add-card").hide(function() {
-		$("#new-card").show(function() {
-			readCard();
-		});
-	}); 
+	$.ajax({
+		type: "POST",
+		url: "server/cardProcessor.php",
+		data: { "action": "reset_keycards" },
+		success: function(data) { 
+			$("#new-card").html("Please put card on the reader"); 
+			$("#add-card").hide(function() {
+				$("#new-card").show(function() {
+					readCard();
+				});
+			}); 
+		},
+		error: function (data) {
+			$('#new-card').html("Failed to register card (either try again or contact tech team for help)");
+			$("#new-card").show();
+		},		
+		async: false
+	});
 }
 
-function readCard() {
-	read_card = false;
-	cont = true;
-	date_object = new Date();
-	start = date_object.getTime();
-	while (read_card == false && cont == true) {
-		read_card = readFile();
-		now = new Date().getTime();
-		if ((now - start) > 10000) {
-			cont = false;
-		}
+function readCard(timeout) {
+	data = readFile();
+	if (!timeout) {
+		timeout = Date.now() + 10000;
 	}
-	if (read_card) {
-		theResource = "data/keycard.txt";
-		$.get(theResource, function(data) {
-			$('#new-card').html("Registering Card: " + data);
-			if (registerCard(data)) {
-				$('#new-card').html("SUCCESS Registered: " + data);
+	if (data == "" && (Date.now() < timeout)) {
+		setTimeout(function() { readCard(timeout); },1000);
+	}
+	if (data != "") {
+		$('#new-card').html("Registering Card: " + data);
+		if (registerCard(data)) {
+			$('#new-card').html("SUCCESS Registered: " + data);
 				$("#add-card").show();
-			} else {
-				$('#new-card').html("Failed to register card (either try again or contact tech team for help)");			
-			}
-		});
-	} else {
+		} else {
+			$('#new-card').html("Failed to register card (either try again or contact tech team for help)");
+		}
+	} else if (Date.now() > timeout) {
 		$('#new-card').html("No card recognised");
 		$("#add-card").show();
 	}
 }
 
+function readFile() {
+	red = "";
+	theResource = "data/keycard.txt";
+	$.ajax({
+		type: "GET",
+		url: theResource,
+		success: function(data) { 
+				ret = data; 
+			},
+		error: function (data) {
+				ret = ""; 
+			},		
+		async: false
+	});
+	return ret;
+}
+
 function registerCard(keycard_id) {
 	ret = false;
-	console.log("Registering: " + keycard_id);
 	$.ajax({
 		type: "POST",
 		url: "server/cardProcessor.php",
@@ -61,29 +82,6 @@ function registerCard(keycard_id) {
 		error: function (data) {
 				ret = false; 
 			},		
-		async: false
-	});
-	return ret;
-}
-
-function readFile() {
-	var now = Date.now();
-	theResource = "data/keycard.txt";
-	var ret = true;
-	$.ajax({
-		url:theResource,
-		type:"head",
-		success:function(res,code,xhr) {
-			var last_modified = xhr.getResponseHeader("Last-Modified");
-			last_modified = new Date(last_modified);
-			if (last_modified > now) {
-				ret = true;
-			} else {
-				ret = false;
-			}
-		},
-		error: function(res,code,xhr) {
-		},
 		async: false
 	});
 	return ret;

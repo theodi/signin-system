@@ -8,6 +8,12 @@ $action = $_POST["action"];
 $person_id = $_POST["person_id"];
 $keycard_id = $_POST['keycard_id'];
 
+if ($action == "reset_keycards") {
+	$statusCode = reset_keycards();
+	returnFunction($statusCode);
+}
+
+
 if ($keycard_id == "" || strpos($statusCode," ") > 0 || strpos($statusCode,"'") > 0 || strpos($statusCode,'"') > 0 || strpos($statusCode,";")>0 || strpos($statusCode,",") > 0) {
 	$statusCode = 400;
 	returnFunction($statusCode);
@@ -23,7 +29,6 @@ if ($action == "associate_keycard") {
 	$statusCode = register_keycard($keycard_id);
 }
 	
-
 returnFunction($statusCode);
 
 function returnFunction($statusCode) {

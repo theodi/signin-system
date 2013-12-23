@@ -153,6 +153,16 @@ function associate_keycard($person_id,$keycard_id) {
 	return ($res);
 }
 
+function reset_keycards() {
+	$handle = fopen('../data/keycard.txt','w');
+	if (!$handle) {
+		return 500;
+	}
+	fwrite($handle,"");
+	fclose($handle);
+	return 204;
+}
+
 //GOT HERE WITH UPDATES
 
 function associate_keycard_member($member_id,$keycard_id) {
