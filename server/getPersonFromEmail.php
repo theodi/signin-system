@@ -1,5 +1,6 @@
 <?php
 
+	error_reporting(E_ALL ^ E_NOTICE);
 	include('functions.php');
 
 	$email = $_POST["email"];
