@@ -10,12 +10,21 @@
 $( document ).ready(function() {
 	showCurrentSubscriptions();
 	detectSafari();
+	setInterval(function() { detectSafari() },2000);
 	registerAlertListeners();
 });
+
+var permissionData = {};
 
 function detectSafari() {
 	if ('safari' in window && 'pushNotification' in window.safari) {
 		$("#push-alerts").attr('disabled',false);
+		permissionData = window.safari.pushNotification.permission('web.org.theodi.signin');
+		if (permissionData.permission == "granted") {
+			$("#push-alerts").prop('checked',true);
+		} else {
+			$("#push-alerts").prop('checked',false);
+		}
 	}
 }
 
@@ -28,13 +37,9 @@ function showCurrentSubscriptions() {
 		success: function(data) {
 			person = data;
 			person.email = qs.email;
-			console.log(person);
 			if (person.alerts_subscribed == "1") {
 				$("#email-alerts").prop('checked',true);
 			} 
-			if (person.push_notifications == "1") {
-				$("#push-alerts").prop('checked',true);
-			}
 		},
 		error: function() {
 			console.log("error getting subscriptions");
@@ -57,6 +62,29 @@ function subscriptionRequest(qs) {
 	});
 }
 
+
+var checkRemotePermission = function (permissionData) {
+    if (permissionData.permission === 'default') {
+        // This is a new web service URL and its validity is unknown.
+        websitePushID = "web.org.theodi.signin";
+        webServiceURL = "https://sown-auth.ecs.soton.ac.uk/~davetaz/server";
+        window.safari.pushNotification.requestPermission(
+            webServiceURL,
+            websitePushID,
+            {email: qs.email }, // Data that you choose to send to your server to help you identify the user.
+            checkRemotePermission         // The callback function.
+        );
+    }
+    else if (permissionData.permission === 'denied') {
+	  alert('You have denied this site access to push notifications, to re-enable it please use notification center via Safari->Preferences->Notifications or System Preferences');
+        // The user said no.
+    }
+    else if (permissionData.permission === 'granted') {
+        // The web service URL is a valid push provider, and the user said yes.
+        // permissionData.deviceToken is now available to use.
+    }
+};
+
 function registerAlertListeners() {
 	$("#email-alerts").click(function () {
 		$('#alerts-message').html('');
@@ -66,6 +94,15 @@ function registerAlertListeners() {
 			qs.option = "unsubscribe";
 		}
 		subscriptionRequest(qs);
+	});
+	$("#push-alerts").click(function () {
+		$('#alerts-message').html('');
+		if ($(this).is(':checked')) {
+			checkRemotePermission(permissionData);
+		} else {
+			alert('In order to revoke permission on this device you need to use notification center via Safari->Preferences->Notifications or System Preferences');
+			$("#push-alerts").prop('checked',true);
+		}
 	});
 }
 
