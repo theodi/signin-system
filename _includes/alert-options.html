@@ -1,0 +1,66 @@
+<section id="alert-options">
+	<h2>Alert Options</h2>
+	<p>To configure your "here to see" alerts please select from the options below</p>
+	<br/>
+	<item><input style="margin-bottom: 0.5em;" type="checkbox" name="email-alerts" id="email-alerts"></input><label class="right-label">Email Alerts<br/><small>Select this option to receive alerts via email</small></label></item>
+	<item><input style="margin-bottom: 0.5em;" type="checkbox" name="push-alerts" id="push-alerts"></input><label class="right-label">Push Nofications<br/><small>On OS X (in Safari only) this option enables push notifications (recommended).</small></label></item>
+	<h1 id="alerts-message"></h1>
+</section>
+<script>
+$( document ).ready(function() {
+	showCurrentSubscriptions();
+	registerAlertListeners();
+});
+
+function showCurrentSubscriptions() {
+	$.ajax({
+		type: 'post',
+		url: 'server/getSubscriptionsFromEmail.php',
+		timeout: 2000,
+		data: {email: qs.email},
+		success: function(data) {
+			person = data;
+			person.email = qs.email;
+			console.log(person);
+			if (person.alerts_subscribed == "1") {
+				$("#email-alerts").prop('checked',true);
+			} 
+			if (person.push_notifications == "1") {
+				$("#push-alerts").prop('checked',true);
+			}
+		},
+		error: function() {
+			console.log("error getting subscriptions");
+		}
+	});	
+}
+
+function subscriptionRequest(qs) {
+	$.ajax({
+                type: 'post',
+                url: 'server/subscriptionRequest.php',
+		data: qs,
+		success: function(data) {
+			$('#alerts-message').html('Success: Your subscription status has been updated');
+		},
+		error: function() {
+			$('#alerts-message').html('There has been an error, could not complete subscription!');
+			$("#email-alerts").prop('checked',false);
+		}
+	});
+}
+
+function registerAlertListeners() {
+	$("#email-alerts").click(function () {
+		$('#alerts-message').html('');
+		if ($(this).is(':checked')) {
+			qs.option = "subscribe";
+		} else {
+			qs.option = "unsubscribe";
+		}
+		subscriptionRequest(qs);
+	});
+}
+
+</script>
+

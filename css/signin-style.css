@@ -86,6 +86,16 @@ section label {
 	font-size: 1.4em;
 	vertical-align: sub;
 }
+.right-label {
+	display: inline-block;
+	text-align: left;
+	margin-left: 10px;
+	font-size: 1em;
+	width: 50%;
+}
+small {
+	font-size: 0.8em;
+}
 button {
 	background-color: #00b7ff;
 	border-radius: 4px;

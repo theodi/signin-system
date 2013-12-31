@@ -20,13 +20,24 @@
 	$query = 'select * from midata where email="'.$email.'";';
 	$res = $mysqli->query($query);
 	if ($res->num_rows > 0) {	
+		$row = $res->fetch_assoc();
 		$array["midata"] = "1";
+		$array["midata-subscribed"] = $row["subscribed"];
 	}
 	$query = 'select * from alerts where email="'.$email.'";';
 	$res = $mysqli->query($query);
 	if ($res->num_rows > 0) {	
+		$row = $res->fetch_assoc();
 		$array["alerts"] = "1";
+		$array["alerts_subscribed"] = $row["subscribed"];
 	}
+	
+	$query = 'select * from device_id where email="'.$email.'";';
+	$res = $mysqli->query($query);
+	if ($res->num_rows > 0) {	
+		$array["push_alerts"] = 1;
+	}	
+
 	$query = 'select role from people inner join people_roles on people_roles.person_id=people.id where email="'.$email.'" order by people_roles.valid_from desc limit 1;';
 	$res = $mysqli->query($query);
 	if ($res->num_rows > 0) {	
