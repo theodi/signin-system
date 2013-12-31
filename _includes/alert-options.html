@@ -3,14 +3,21 @@
 	<p>To configure your "here to see" alerts please select from the options below</p>
 	<br/>
 	<item><input style="margin-bottom: 0.5em;" type="checkbox" name="email-alerts" id="email-alerts"></input><label class="right-label">Email Alerts<br/><small>Select this option to receive alerts via email</small></label></item>
-	<item><input style="margin-bottom: 0.5em;" type="checkbox" name="push-alerts" id="push-alerts"></input><label class="right-label">Push Nofications<br/><small>On OS X (in Safari only) this option enables push notifications (recommended).</small></label></item>
+	<item><input style="margin-bottom: 0.5em;" disabled="disabled" type="checkbox" name="push-alerts" id="push-alerts"></input><label class="right-label">Push Nofications<br/><small>On OS X (in Safari only) this option enables push notifications (recommended).</small></label></item>
 	<h1 id="alerts-message"></h1>
 </section>
 <script>
 $( document ).ready(function() {
 	showCurrentSubscriptions();
+	detectSafari();
 	registerAlertListeners();
 });
+
+function detectSafari() {
+	if ('safari' in window && 'pushNotification' in window.safari) {
+		$("#push-alerts").attr('disabled',false);
+	}
+}
 
 function showCurrentSubscriptions() {
 	$.ajax({
