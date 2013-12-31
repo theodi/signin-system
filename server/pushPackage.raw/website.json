@@ -1,0 +1,8 @@
+{
+    "websiteName": "ODI Reception",
+    "websitePushID": "web.org.theodi.signin",
+    "allowedDomains": [ "https://reception.theodi.org", "https://sown-auth.ecs.soton.ac.uk" ],
+    "urlFormatString": "http://reception.theodi.org/%@",
+    "authenticationToken": "{AUTHTOKEN}",
+    "webServiceURL": "https://sown-auth.ecs.soton.ac.uk/~davetaz/server"
+}
