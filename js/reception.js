@@ -74,7 +74,7 @@ function processEmail(emailinput) {
 			}
 			$("#email").val(person.email);
 			$("#email").prop('disabled', true);
-			showSection('reception-options');
+			showSection('complete');
 		},
 		error: function() {
 			goHome();

@@ -10,3 +10,17 @@
 		<button id="reception-email-next">Next</button>
 	</form>
 </section>
+<script>
+$( document ).ready(function() {
+	registerReceptionListeners();
+});
+
+function registerReceptionListeners() {
+	$("#reception-email-next").click(function () {
+		person.email = $("#email-input").val();
+		console.log(person);
+		showSection('complete');
+	});
+}
+</script>
+

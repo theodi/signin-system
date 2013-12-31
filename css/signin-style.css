@@ -160,12 +160,15 @@ banner content {
 	padding-left: 50px;
 	font-size: 1em;
 }
+#regular {
+	width: 50%;
+	float: left;
+	vertical-align: top;
+	border-right: 1px solid gray;
+}
 .touch-in-detail {
 	display: inline-block;
 	font-size: 1em;
-}
-#regular-title {
-	margin-top: 2em;
 }
 .reg-help {
 	margin-top: 1.5em;
