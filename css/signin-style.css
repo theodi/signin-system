@@ -176,6 +176,11 @@ banner content {
 	vertical-align: top;
 	border-right: 1px solid gray;
 }
+#midata {
+	width: 48%;
+	float: right;
+	vertical-align: top;
+}
 .touch-in-detail {
 	display: inline-block;
 	font-size: 1em;
