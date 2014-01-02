@@ -331,8 +331,6 @@ function showSection(sectionName) {
 					$('form:first *:input[type!=hidden]:first').focus();
 				});
 			});
-		} else {
-			$("#"+sectionName).fadeIn();
 		}
 	}
 }
