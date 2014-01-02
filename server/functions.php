@@ -60,6 +60,7 @@ function sign_in($person) {
 
 function handleNotifications($person) {
 	$toSee = $person["toSee"];
+//Some ODI specific hacks
 	if (strpos($toSee,"@") === false) {
 		if ($toSee == "gavin-starks") {
 			$toSee = "gavin@theodi.org";
@@ -77,6 +78,7 @@ function handleNotifications($person) {
 	if (strpos($toSee,"-") !== false and strpos($toSee,"@") === false) {
 		$toSee = str_replace("-",".",$toSee) . "@theodi.org";
 	}
+// End hacks
 	
 	if (hasPushNotifications($toSee)) {
 		require_once('push-notification.php');

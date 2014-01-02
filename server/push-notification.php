@@ -1,8 +1,10 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
 require_once('functions.php');
+require_once('push-config.php');
 
 function sendPushNotification($deviceToken,$title,$body,$button) {
+	global $apnsCert;
 	$payload['aps']['alert'] = array(
 			"title" => $title,
 			"body" => $body,
@@ -14,8 +16,6 @@ function sendPushNotification($deviceToken,$title,$body,$button) {
 	$payload = json_encode($payload);
 	$apnsHost = 'gateway.push.apple.com';
 	$apnsPort = 2195;
-	// This may need absolute pathing
-	$apnsCert = '/home/davetaz/signin-system/server/ODISigninCertificate.pem';
 	$streamContext = stream_context_create();
 	stream_context_set_option($streamContext, 'ssl', 'local_cert', $apnsCert);
 	$apns = stream_socket_client('ssl://' . $apnsHost . ':' . $apnsPort, $error, $errorString, 2, STREAM_CLIENT_CONNECT, $streamContext);
@@ -39,12 +39,10 @@ function sendNotification($email,$title,$body,$button) {
 //	$title = "Arrival Notification";
 //	$body = "Someone is here to see you!";
 //	$button = "View";
-//	$deviceToken = "8408E82A79ED1A4D5AD232AA07433FEE7DF66C18BC269AB5A668C4A6C0F9F174";
+//	$deviceToken = "....";
 //	sendPushNotification($deviceToken,$title,$body,$button);
 
 if ($argv[1]) {
-	require_once('functions.php');
-	
 	$button = $argv[2];
 	$title = $argv[3];
 	$body = $argv[4];
