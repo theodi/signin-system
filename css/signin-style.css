@@ -86,6 +86,16 @@ section label {
 	font-size: 1.4em;
 	vertical-align: sub;
 }
+.right-label {
+	display: inline-block;
+	text-align: left;
+	margin-left: 10px;
+	font-size: 1em;
+	width: 50%;
+}
+small {
+	font-size: 0.8em;
+}
 button {
 	background-color: #00b7ff;
 	border-radius: 4px;
@@ -160,12 +170,20 @@ banner content {
 	padding-left: 50px;
 	font-size: 1em;
 }
+#regular {
+	width: 50%;
+	float: left;
+	vertical-align: top;
+	border-right: 1px solid gray;
+}
+#midata {
+	width: 48%;
+	float: right;
+	vertical-align: top;
+}
 .touch-in-detail {
 	display: inline-block;
 	font-size: 1em;
-}
-#regular-title {
-	margin-top: 2em;
 }
 .reg-help {
 	margin-top: 1.5em;

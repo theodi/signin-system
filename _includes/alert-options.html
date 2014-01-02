@@ -1,0 +1,110 @@
+<section id="alert-options">
+	<h2>Alert Options</h2>
+	<p>To configure your "here to see" alerts please select from the options below</p>
+	<br/>
+	<item><input style="margin-bottom: 0.5em;" type="checkbox" name="email-alerts" id="email-alerts"></input><label class="right-label">Email Alerts<br/><small>Select this option to receive alerts via email</small></label></item>
+	<item><input style="margin-bottom: 0.5em;" disabled="disabled" type="checkbox" name="push-alerts" id="push-alerts"></input><label class="right-label">Push Nofications<br/><small>On OS X (in Safari only) this option enables push notifications (recommended).</small></label></item>
+	<h1 id="alerts-message"></h1>
+</section>
+<script>
+$( document ).ready(function() {
+	showCurrentSubscriptions();
+	detectSafari();
+	setInterval(function() { detectSafari() },2000);
+	registerAlertListeners();
+});
+
+var permissionData = {};
+
+function detectSafari() {
+	if ('safari' in window && 'pushNotification' in window.safari) {
+		$("#push-alerts").attr('disabled',false);
+		permissionData = window.safari.pushNotification.permission('web.org.theodi.signin');
+		if (permissionData.permission == "granted") {
+			$("#push-alerts").prop('checked',true);
+		} else {
+			$("#push-alerts").prop('checked',false);
+		}
+	}
+}
+
+function showCurrentSubscriptions() {
+	$.ajax({
+		type: 'post',
+		url: 'server/getSubscriptionsFromEmail.php',
+		timeout: 2000,
+		data: {email: qs.email},
+		success: function(data) {
+			person = data;
+			person.email = qs.email;
+			if (person.alerts_subscribed == "1") {
+				$("#email-alerts").prop('checked',true);
+			} 
+		},
+		error: function() {
+			console.log("error getting subscriptions");
+		}
+	});	
+}
+
+function subscriptionRequest(qs) {
+	$.ajax({
+                type: 'post',
+                url: 'server/subscriptionRequest.php',
+		data: qs,
+		success: function(data) {
+			$('#alerts-message').html('Success: Your subscription status has been updated');
+		},
+		error: function() {
+			$('#alerts-message').html('There has been an error, could not complete subscription!');
+			$("#email-alerts").prop('checked',false);
+		}
+	});
+}
+
+
+var checkRemotePermission = function (permissionData) {
+    if (permissionData.permission === 'default') {
+        // This is a new web service URL and its validity is unknown.
+        websitePushID = "web.org.theodi.signin";
+        webServiceURL = "https://sown-auth.ecs.soton.ac.uk/~davetaz/server";
+        window.safari.pushNotification.requestPermission(
+            webServiceURL,
+            websitePushID,
+            {email: qs.email }, // Data that you choose to send to your server to help you identify the user.
+            checkRemotePermission         // The callback function.
+        );
+    }
+    else if (permissionData.permission === 'denied') {
+	  alert('You have denied this site access to push notifications, to re-enable it please use notification center via Safari->Preferences->Notifications or System Preferences');
+        // The user said no.
+    }
+    else if (permissionData.permission === 'granted') {
+        // The web service URL is a valid push provider, and the user said yes.
+        // permissionData.deviceToken is now available to use.
+    }
+};
+
+function registerAlertListeners() {
+	$("#email-alerts").click(function () {
+		$('#alerts-message').html('');
+		if ($(this).is(':checked')) {
+			qs.option = "subscribe";
+		} else {
+			qs.option = "unsubscribe";
+		}
+		subscriptionRequest(qs);
+	});
+	$("#push-alerts").click(function () {
+		$('#alerts-message').html('');
+		if ($(this).is(':checked')) {
+			checkRemotePermission(permissionData);
+		} else {
+			alert('In order to revoke permission on this device you need to use notification center via Safari->Preferences->Notifications or System Preferences');
+			$("#push-alerts").prop('checked',true);
+		}
+	});
+}
+
+</script>
+

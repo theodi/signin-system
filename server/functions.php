@@ -50,7 +50,48 @@ function sign_in($person) {
 	$query = "insert into in_out set ".$query_part.", checkin='$date_string', checkout='';";
 	
 	$res = $mysqli->query($query);
-	return $res; 
+	
+	if ($person["toSee"] != "") {
+		handleNotifications($person);
+	}
+
+	return $res;
+}
+
+function handleNotifications($person) {
+	$toSee = $person["toSee"];
+//Some ODI specific hacks
+	if (strpos($toSee,"@") === false) {
+		if ($toSee == "gavin-starks") {
+			$toSee = "gavin@theodi.org";
+		} 
+		if ($toSee == "stuart-colemant") {
+			$toSee = "stuart@theodi.org";
+		} 
+		if ($toSee == "jeni-tennison") {
+			$toSee = "jeni@theodi.org";
+		} 
+		if ($toSee == "david-tarrant") {
+			$toSee = "davetaz@theodi.org";
+		} 
+	}
+	if (strpos($toSee,"-") !== false and strpos($toSee,"@") === false) {
+		$toSee = str_replace("-",".",$toSee) . "@theodi.org";
+	}
+// End hacks
+	
+	if (hasPushNotifications($toSee)) {
+		require_once('push-notification.php');
+		$title = "Reception Notification";
+		$body = $person["firstname"] . ' ' . $person["lastname"] . ' is here to see you.';
+		$button = "View";
+		sendNotification($toSee,$title,$body,$button);
+	}
+	if (hasEmailAlerts($toSee)) {
+		$subject = "ODI Reception: Visitor waiting";
+		$body = $person["firstname"] . ' ' . $person["lastname"] . ' is here to see you.';
+		sendReceptionEmail($toSee,$subject,$body);
+	}
 }
 
 function sign_out($person) {
@@ -163,6 +204,41 @@ function reset_keycards() {
 	return 204;
 }
 
+function hasEmailAlerts($email) {
+	global $mysqli;
+	$query = 'select * from alerts where email="'.$email.'" and authenticated=1 and subscribed=1;';
+	$res = $mysqli->query($query);
+	if ($res->num_rows > 0) {
+		return true;
+	} 
+	return false;
+}
+
+function hasPushNotifications($email) {
+	global $mysqli;
+	$query = 'select * from device_id where email="'.$email.'";';
+	$res = $mysqli->query($query);
+	if ($res->num_rows > 0) {
+		return true;
+	} 
+	return false;
+}
+
+function sendReceptionEmail($email,$subject,$body) {
+	$to = $email;
+	$from = "ODI Reception <no-reply@reception.theodi.org>";
+	$headers = "From:" . $from;
+	$message = "Dear $email,
+
+$body
+
+Many thanks
+
+The ODI Reception Robot
+http://www.theodi.org";
+
+	mail($to,$subject,$message,$headers);
+}
 //GOT HERE WITH UPDATES
 
 function associate_keycard_member($member_id,$keycard_id) {

@@ -1,0 +1,26 @@
+<section id="reception-email">
+	<form id="email-form" action="javascript:void(0);">
+		<h2>To begin, please enter your <b>email</b></h2>
+		<br/>
+		<input id="email-input" name="email" type="email"></input>
+		<br/>
+		<p id="email-help">
+		Once you have entered your email you can subscribe to data feeds, or if a member of ODI staff/startups, register for alerts when visitors arrive to see you. 
+</p>
+		<button id="reception-email-next">Next</button>
+	</form>
+</section>
+<script>
+$( document ).ready(function() {
+	registerReceptionListeners();
+});
+
+function registerReceptionListeners() {
+	$("#reception-email-next").click(function () {
+		person.email = $("#email-input").val();
+		console.log(person);
+		showSection('complete');
+	});
+}
+</script>
+

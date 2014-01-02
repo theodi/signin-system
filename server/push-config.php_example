@@ -1,0 +1,8 @@
+<?php
+
+$certificate_path = "my_cert.p12";     // Change this to the path where your certificate is located
+$certificate_password = "my_cert_pass"; // Change this to the certificate's import password
+$apnsCert = '/the/directory/my_certificate.pem'; //Change this to the absolute path of your certificate file (.pem)
+
+
+?>

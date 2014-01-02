@@ -1,2 +1,7 @@
 build
 build/*
+_site
+_site/*
+server/push-config.php
+server/ODISigninCertificate.p12
+server/ODISigninCertificate.pem
