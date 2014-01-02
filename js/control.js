@@ -130,7 +130,7 @@ function loadStaff() {
 	  success: function(data) {
 	        staff = data.results;
 	        populate_staff(staff);
-		loadStartups();	
+		  loadStartups();	
 	  },
 	  error: function() {
 	         console.log("error loading staff");
@@ -145,7 +145,7 @@ function loadStartups() {
 	  timeout: 2000,
 	  success: function(data) {
 	        startups = data.results;
-		staff = staff.concat(startups);
+		  staff = staff.concat(startups);
 	        populate_staff(startups);
 	  },
 	  error: function() {

@@ -15,7 +15,7 @@ function sendPushNotification($deviceToken,$title,$body,$button) {
 	$apnsHost = 'gateway.push.apple.com';
 	$apnsPort = 2195;
 	// This may need absolute pathing
-	$apnsCert = 'ODISigninCertificate.pem';
+	$apnsCert = '/home/davetaz/signin-system/server/ODISigninCertificate.pem';
 	$streamContext = stream_context_create();
 	stream_context_set_option($streamContext, 'ssl', 'local_cert', $apnsCert);
 	$apns = stream_socket_client('ssl://' . $apnsHost . ':' . $apnsPort, $error, $errorString, 2, STREAM_CLIENT_CONNECT, $streamContext);
