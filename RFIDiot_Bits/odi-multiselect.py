@@ -56,8 +56,9 @@ while 42:
 		response = conn.getresponse()
 		print response.status, response.reason
 		data = response.read()
-		conn.close()	
-		p = Popen(["afplay", str(response.status) + ".mp3"])
+		conn.close()
+		time.sleep(4)
+#		p = Popen(["afplay", str(response.status) + ".mp3"])
 	else:
 		print '    No card present\r',
 		sys.stdout.flush()
