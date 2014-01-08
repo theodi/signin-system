@@ -76,7 +76,7 @@ The ODI Reception MiData service offers (up to) monthly emails detailing your vi
 
 In order to confirm this subscription please click the link below:
 
-https://sown-auth.ecs.soton.ac.uk/~davetaz/subscribe?type=midata&email=$email&urlkey=$uniqid
+https://reception.office.theodi.org/subscribe?type=midata&email=$email&urlkey=$uniqid
 ";
 
 if ($alerts) {
@@ -88,7 +88,7 @@ As a member of staff/startups you can also subscribe to live alerts about visito
 
 In order to configure your alerts please click the link below:
 
-https://sown-auth.ecs.soton.ac.uk/~davetaz/subscribe?type=alerts&email=$email&urlkey=$uniqid
+https://reception.office.theodi.org/subscribe?type=alerts&email=$email&urlkey=$uniqid
 ";
 }
 
