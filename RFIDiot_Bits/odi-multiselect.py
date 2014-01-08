@@ -51,7 +51,7 @@ while 42:
 	if card.select():
 		print '    Tag ID: ' + card.uid,
 		params = urllib.urlencode({'action': "keycard", 'keycard_id': card.uid})
-		conn = httplib.HTTPConnection("signin.office.theodi.org")
+		conn = httplib.HTTPConnection("reception.office.theodi.org")
 		conn.request("POST", "/server/cardProcessor.php", params, headers)
 		response = conn.getresponse()
 		print response.status, response.reason

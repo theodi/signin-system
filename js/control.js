@@ -283,6 +283,9 @@ function goHome() {
 	$("#new-card").hide();
 	$("#add-card").show();
 	$("#midata-subscribe").val("Subscribe");
+	$("#midata-subscribe").show();
+	$("#midata-subscription-status").html('');
+	
 	clearTimeout(timeout);
 	manageStaffOptions("");
 	showSection('welcome');
@@ -356,6 +359,7 @@ function bannerThread() {
 }
 
 function processSubscriptions(person) {
+	$("#midata-subscribe").hide();
 	content = '<img src="../img/ajax-loader.gif" alt="Loading"/>';
 	$("#midata-subscription-status").html(content);
 	$.ajax({
