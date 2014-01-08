@@ -75,6 +75,9 @@ function registerListeners() {
 	$('#terms-agree').click(function() {
 		recordPerson(person);
 	});
+	$("#terms-cancel").click(function () {
+		goHome();
+	});
 	$('#sign-out').click(function() {
 		signOut(person);
 	});
@@ -83,7 +86,9 @@ function registerListeners() {
 		clearTimeout(timeout);
 		timeout = setTimeout(function(){goHome();},60000);
 	});
-	
+	$("#midata-subscribe").click(function() {
+		processSubscriptions(person);
+	});
 }
 
 function recordPerson(person) {
@@ -125,7 +130,7 @@ function loadStaff() {
 	  success: function(data) {
 	        staff = data.results;
 	        populate_staff(staff);
-		loadStartups();	
+		  loadStartups();	
 	  },
 	  error: function() {
 	         console.log("error loading staff");
@@ -140,7 +145,7 @@ function loadStartups() {
 	  timeout: 2000,
 	  success: function(data) {
 	        startups = data.results;
-		staff = staff.concat(startups);
+		  staff = staff.concat(startups);
 	        populate_staff(startups);
 	  },
 	  error: function() {
@@ -152,7 +157,6 @@ function loadStartups() {
 function populate_staff(staff) {
 	for (i=0;i<staff.length;i++) {
                 name = staff[i].title;
-		console.log("Appending " + name);
                 key = staff[i].slug;
                 img = staff[i].details.square;
                 $('#to-see-sugestions').append('<li style="display: none;" name="staffOption" id="'+key+'" value="'+key+'"><figure class="staffOption"><img class="staffPic" src="'+img+'"/><caption>'+name+'</caption></figure>');
@@ -223,7 +227,27 @@ function processNFCCard(person) {
 	});	
 }
 
+function processEmailSubscription(emailinput) {
+	$.ajax({
+		type: 'post',
+		url: 'server/getSubscriptionsFromEmail.php',
+		timeout: 2000,
+		data: {email: emailinput},
+		success: function(data) {
+			person = data;
+			person.email = emailinput;
+			if (person.miData == 1) {
+				$("#midata-subscribe").val("Retry Subscription");
+			} 
+		},
+		error: function() {
+			goHome();
+		}
+	});	
+}
+
 function getPersonFromEmail(emailinput) {
+	processEmailSubscription(emailinput);
 	$.ajax({
 		type: 'get',
 		url: 'server/getPersonFromEmail.php',
@@ -258,6 +282,7 @@ function goHome() {
 	$("#new-card").html("Please put card on the reader");
 	$("#new-card").hide();
 	$("#add-card").show();
+	$("#midata-subscribe").val("Subscribe");
 	clearTimeout(timeout);
 	manageStaffOptions("");
 	showSection('welcome');
@@ -326,6 +351,25 @@ function bannerThread() {
 			}			
 		},
 		error: function() {
+		}
+	});	
+}
+
+function processSubscriptions(person) {
+	content = '<img src="../img/ajax-loader.gif" alt="Loading"/>';
+	$("#midata-subscription-status").html(content);
+	$.ajax({
+		type: 'post',
+		url: 'server/subscribeService.php',
+		timeout: 2000,
+		data: {email: person.email },
+		success: function(data) {
+			content = "Success: An email has been sent to your email to confirm the subscription.";
+			$("#midata-subscription-status").html(content);
+		},
+		error: function() {
+			content = "Error: There was an error processing your request, please try again.";
+			$("#midata-subscription-status").html(content);
 		}
 	});	
 }

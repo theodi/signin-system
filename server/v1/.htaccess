@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteRule .* /~davetaz/server/push-server.php
+<Limit GET POST PUT DELETE>
+  Allow from all
+</Limit>
