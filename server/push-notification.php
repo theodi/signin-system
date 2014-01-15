@@ -1,10 +1,9 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
 require_once('functions.php');
-require_once('push-config.php');
 
 function sendPushNotification($deviceToken,$title,$body,$button) {
-	global $apnsCert;
+	include('push-config.php');
 	$payload['aps']['alert'] = array(
 			"title" => $title,
 			"body" => $body,
