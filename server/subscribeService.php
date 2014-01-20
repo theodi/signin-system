@@ -67,7 +67,7 @@ function sendSubscriptionEmail($email,$uniqid,$alerts) {
 
 You (or someone who entered your email) have requested access to one or more of the ODI reception services detailed below. 
 
-If you have not reqeusted a subscription to this server, we appologise for any inconvienence this email has caused. You do not need to perform any further action and can delete this email.
+If you have not requested a subscription to this server, we appologise for any inconvienence this email has caused. You do not need to perform any further action and can delete this email.
 
 MiData
 ======
