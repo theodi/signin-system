@@ -35,15 +35,16 @@ function registerListeners() {
 			person.firstname = $("#firstname").val();
 			person.lastname = $("#lastname").val();
 			person.email = $("#email").val();
-			person.sector = $("#sector").val();
+//			person.sector = $("#sector").val();
 			person.role = $("#role").val();
-			if (!person.sector) {
-				requestSectorForPerson(person);
-			} else {
+//			if (!person.sector) {
+//				requestSectorForPerson(person);
+//			} else {
 				showHereToSee();	
-			}
+//			}
 		}
 	});
+/*	
 	$("#change-sector").click(function () {
 		if ($("#details")[0].checkValidity()) {
 			person.firstname = $("#firstname").val();
@@ -54,16 +55,19 @@ function registerListeners() {
 			requestSectorForPerson(person);
 		}
 	});
+*/
 	$("li").click(function () {
 		if (  $( this ).attr("name") == "staffOption") {
 			person.toSee = $( this ).attr("value");
 			showTerms();
 		}
+		/*
 		if (  $( this ).attr("id") == "sectorOption") {
 			person.sector = $( this ).attr("value");
 			$("#sector").val(person.sector);
 			showHereToSee();
 		}
+		*/
 	});
 	$('input[name=to-see]').keyup(function() {
 		manageStaffOptions($('#here-to-see-input').val());
@@ -166,17 +170,19 @@ function populate_staff(staff) {
 			person.toSee = $( this ).attr("value");
 			showTerms();
 		}
+		/*
 		if (  $( this ).attr("id") == "sectorOption") {
 			person.sector = $( this ).attr("value");
 			showHereToSee();
 		}
+		*/
 	});
 }
-
+/*
 function requestSectorForPerson(person) {
 	showSection('sign-in-sector');	
 }
-
+*/
 function showEmailInput() {
 	showSection('sign-in-email');
 }
@@ -277,7 +283,7 @@ function showDone() {
 
 function goHome() {
 	resetForms();
-	$("#sector-name").hide();
+//	$("#sector-name").hide();
 	$("#role-name").hide();
 	$("#new-card").html("Please put card on the reader");
 	$("#new-card").hide();
@@ -311,10 +317,10 @@ function showNameInput(person) {
 		$("#firstname").val(person.firstname);
 		$("#lastname").val(person.lastname);
 		$("#role").val(person.role);
-		if (person.sector) {
-			$("#sector").val(person.sector);
-			$("#sector-name").fadeIn('fast');
-		}
+//		if (person.sector) {
+//			$("#sector").val(person.sector);
+//			$("#sector-name").fadeIn('fast');
+//		}
 	}
 	$("#sign-in-email").fadeOut(function() {
 		$("#sign-in-name").fadeIn(function () {
