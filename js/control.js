@@ -25,16 +25,21 @@ function registerListeners() {
 	$("#home-button2").click(function () {
 		goHome();
 	});
+	$("#email-input").change(function() {
+		//if ($("#email-form")[0].checkValidity());
+			getPersonFromEmail2($("#email-input").val());
+		//}
+	});
 	$("#email-next").click(function () {
 		if ($("#email-form")[0].checkValidity()) {
 			getPersonFromEmail($("#email-input").val());
 		}
 	});
 	$("#name-next").click(function () {
-		if ($("#details")[0].checkValidity()) {
+		if ($("#email-form")[0].checkValidity()) {
 			person.firstname = $("#firstname").val();
 			person.lastname = $("#lastname").val();
-			person.email = $("#email").val();
+			person.email = $("#email-input").val();
 //			person.sector = $("#sector").val();
 			person.role = $("#role").val();
 //			if (!person.sector) {
@@ -103,10 +108,15 @@ function recordPerson(person) {
 		timeout: 3000,
 		data: person,
 		success: function(data) {
-			showDone();
+			$('#banner-content').html("Signed in: <b>" + person.firstname + " " + person.lastname + "</b>");
+			$('#banner').slideDown(function() {
+				setTimeout(function() {$('#banner').slideUp();},3000);
+			});
+			goHome();
 		},
 		error: function() {
-			showDone();
+			goHome();
+		//	showDone();
 		}
 	});	
 }
@@ -253,6 +263,31 @@ function processEmailSubscription(emailinput) {
 	});	
 }
 
+function getPersonFromEmail2(emailinput) {
+	processEmailSubscription(emailinput);
+	$.ajax({
+		type: 'get',
+		url: 'server/getPersonFromEmail.php',
+		timeout: 2000,
+		data: {email: emailinput},
+		success: function(data) {
+			person = data;
+			if (person.signedIn) {
+				showSection('sign-out');
+			} else {
+				$("#firstname").val(person.firstname);
+				$("#lastname").val(person.lastname);
+				$("#role").val(person.role);
+			}
+		},
+		error: function() {
+			var data = {};
+			data.email = emailinput;
+			person = data;
+		}
+	});	
+}
+
 function getPersonFromEmail(emailinput) {
 	processEmailSubscription(emailinput);
 	$.ajax({
@@ -285,7 +320,7 @@ function showDone() {
 function goHome() {
 	resetForms();
 //	$("#sector-name").hide();
-	$("#role-name").hide();
+//	$("#role-name").hide();
 	$("#new-card").html("Please put card on the reader");
 	$("#new-card").hide();
 	$("#add-card").show();
