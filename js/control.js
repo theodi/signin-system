@@ -40,7 +40,8 @@ function registerListeners() {
 //			if (!person.sector) {
 //				requestSectorForPerson(person);
 //			} else {
-				showHereToSee();	
+			recordPerson(person);
+			//	showHereToSee();	
 //			}
 		}
 	});
