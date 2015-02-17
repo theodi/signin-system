@@ -108,10 +108,15 @@ function recordPerson(person) {
 		timeout: 3000,
 		data: person,
 		success: function(data) {
-			showDone();
+			$('#banner-content').html("Signed in: <b>" + person.firstname + " " + person.lastname + "</b>");
+			$('#banner').slideDown(function() {
+				setTimeout(function() {$('#banner').slideUp();},3000);
+			});
+			goHome();
 		},
 		error: function() {
-			showDone();
+			goHome();
+		//	showDone();
 		}
 	});	
 }
@@ -259,7 +264,6 @@ function processEmailSubscription(emailinput) {
 }
 
 function getPersonFromEmail2(emailinput) {
-	console.log("input : " + emailinput);
 	processEmailSubscription(emailinput);
 	$.ajax({
 		type: 'get',
