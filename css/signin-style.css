@@ -10,13 +10,13 @@ html, body {
 	position: relative;
 }
 #topbar {
-	height: 70px;
+	height: 50px;
 }
 #home {
 	cursor: pointer;
 }
 #topbar .navbar-inner {
-	height: 70px;
+	height: 50px;
 }
 #topbar .navbar-inner h1 {
 	float: left;
@@ -27,6 +27,9 @@ html, body {
 	float: right;
 	display: inline-block;
 	left: 0px;
+}
+#topbar .navbar-inner .brand img {
+	height: 34px;
 }
 #mainnav {
 	display: none;
@@ -48,16 +51,18 @@ html, body {
 	display: block;
 	float: left;
 	width: 40%;
-	margin-top: 20%;
+	margin-top: 15%;
+	margin-left: 30px;
+}
+#topbar .navbar-inner h1 {
+	font-size: 27px;
 }
 #welcome-image {
 	width: 50%;
 	height: 100%;
 	margin: 0;
-	padding-top: 1em;
-	padding-bottom: 1em;
 	position: absolute;
-	right: 50px;
+	right: 30px;
 }
 #sign-in-email {
 	padding-top: 2em;
@@ -65,12 +70,12 @@ html, body {
 #sign-in-privacy {
 	display: inline-block;
 	width: 25%;
-	top: 70px;
+	top: 50px;
 	position: absolute;
 	right: 0px;
 	text-align: left;
 	background: lightblue;
-	padding: 11px;
+	padding: 5px;
 	height: 84%;
 }
 #email-form {
@@ -78,6 +83,7 @@ html, body {
 	position: absolute;
 	left: 0px;
 	width: 75%;
+	top: 70px;
 }
 select, input, input[type="text"], input[type="email"] {
 	font-size: 2em;
@@ -94,11 +100,15 @@ select, input, input[type="text"], input[type="email"] {
 	margin-left: auto;
 	margin-right: auto;
 }
+h2, h3 {
+	font-size: 1em;
+	margin: 0px;
+}
 p {
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 20px;
-	margin-bottom: 20px; 
+	font-size: 0.7em;
+	line-height: 18px;
 }
 item {
 	display: block;
@@ -108,7 +118,7 @@ section label {
 	display: inline-block;
 	text-align: right;
 	margin-right: 10px;
-	font-size: 1.4em;
+	font-size: 1em;
 	vertical-align: sub;
 }
 .right-label {
@@ -129,7 +139,7 @@ button {
 	font-size: 1.2em;
 }
 #footer {
-	padding-top: 20px;
+	padding-top: 0px;
 	padding-bottom: 0px;
 	position: absolute;
 	width: 100%;
